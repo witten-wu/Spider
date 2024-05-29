@@ -74,6 +74,7 @@ print("===>请注意: 程序运行期间请勿关闭 Chrome, 并请始终保持 
 time.sleep(10)
 print("===>Start Now......")
 while True:
+    wait.until( lambda driver: driver.find_element(By.CSS_SELECTOR, "div.__address_antd_dropdown.ant-spin-container") and "ant-spin-blur" not in driver.find_element(By.CSS_SELECTOR, "div.__address_antd_dropdown.ant-spin-container").get_attribute("class")) 
     address_table_div = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "div.__address_antd_dropdown.ant-table-content")))
     table_element = address_table_div.find_element(By.TAG_NAME, "table")
     time.sleep(2)
