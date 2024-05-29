@@ -75,6 +75,7 @@ time.sleep(10)
 print("===>Start Now......")
 while True:
     wait.until( lambda driver: driver.find_element(By.CSS_SELECTOR, "div.__address_antd_dropdown.ant-spin-container") and "ant-spin-blur" not in driver.find_element(By.CSS_SELECTOR, "div.__address_antd_dropdown.ant-spin-container").get_attribute("class")) 
+    # wait.until(EC.presence_of_element_located((By.XPATH, "//*[@id='gatsby-focus-wrapper']/div/div[1]/section/section/div[1]/div/div/div[4]/div/div/div[2]/div[2]/div/div[3]/div[7]/div/div/div/div/div/table")))
     address_table_div = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "div.__address_antd_dropdown.ant-table-content")))
     table_element = address_table_div.find_element(By.TAG_NAME, "table")
     time.sleep(2)
@@ -87,6 +88,7 @@ while True:
     next_page_button = nextpage.find_element(By.CSS_SELECTOR, "button")
     if nextpage.get_attribute("aria-disabled") == "false": 
         next_page_button.click()
+        wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "div.__address_antd_dropdown.ant-spin-container.__address_antd_dropdown.ant-spin-blur")))
     else:
         break
 
