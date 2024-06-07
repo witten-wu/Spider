@@ -1,4 +1,4 @@
-## How to use spider
+## How to run
 ### Environment Install
 1. ChromeDriver 下载&解压&复制到chrome目录&环境变量配置
 
