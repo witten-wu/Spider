@@ -1,12 +1,11 @@
+import re, time, requests, sys
+import pandas as pd
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-import re, time, requests, sys
-import pandas as pd
-import openpyxl
 
 
 print("Starting Chrome Debug......")
@@ -43,7 +42,7 @@ time.sleep(3)
 print("===> 1. Please check if you have successfully logged in to poe in Chrome, if not, please log in manually.")
 print("===> 2. After successfully logged in, please switch to your prepared chat window.")
 print("You will have 30s to complete the above two steps. Please wait for the program to run automatically after you done......")
-time.sleep(30)
+time.sleep(3)
 
 actions = ActionChains(driver)
 wait = WebDriverWait(driver, 60)
@@ -57,7 +56,7 @@ time.sleep(3)
 print("===> Pre-Processing Materials......")
 df_prompt = pd.read_excel('Pretest GPT prompts.xlsx')
 cropped_df_prompt = df_prompt.iloc[0:3, 2]
-df_material = pd.read_excel('pretest material 0607.xlsx')
+df_material = pd.read_excel('pretest material.xlsx')
 # df_material = pd.read_excel('pretest material 0607 - Copy.xlsx')
 cropped_df_material = df_material.iloc[0:, [3, 4, 5, 6, 9]]
 print("===> Done")
@@ -148,29 +147,18 @@ if button_status:
     Q3_answer_list.append(last_answer)
     Q3_score_list.append(last_score)
 
-workbook = openpyxl.load_workbook('pretest material 0607 - Copy.xlsx')
-sheet = workbook.active
-column_names = ["Q1_LITERAL_Answer", "Q1_LITERAL_Score", "Q1_METAPHORICAL_Answer", "Q1_METAPHORICAL_Score", "Q2_LITERAL_Answer", "Q2_LITERAL_Score", "Q2_METAPHORICAL_Answer", "Q2_METAPHORICAL_Score", "Q3_Answer", "Q3_Score"]
-data_lists = []
-data_lists.append(Q1_answer_list)
-data_lists.append(Q1_score_list)
-data_lists.append(Q1_2_answer_list)
-data_lists.append(Q1_2_score_list)
-data_lists.append(Q2_answer_list)
-data_lists.append(Q2_score_list)
-data_lists.append(Q2_2_answer_list)
-data_lists.append(Q2_2_score_list)
-data_lists.append(Q3_answer_list)
-data_lists.append(Q3_score_list)
-print(data_lists)
-last_column = sheet.max_column + 1
-for i, name in enumerate(column_names, start=last_column):
-    sheet.cell(row=1, column=i, value=name)
-for col_index, col_data in enumerate(data_lists, start=last_column):
-    for row_index, value in enumerate(col_data, start=2):
-        sheet.cell(row=row_index, column=col_index, value=value)
+column_names = ["Q1_LITERAL_Answer", "Q1_LITERAL_Score", "Q1_METAPHORICAL_Answer", "Q1_METAPHORICAL_Score",
+                "Q2_LITERAL_Answer", "Q2_LITERAL_Score", "Q2_METAPHORICAL_Answer", "Q2_METAPHORICAL_Score",
+                "Q3_Answer", "Q3_Score"]
 
-workbook.save('pretest material 0607.xlsx')
-print("===> End. Results Saved in pretest material 0607.xlsx.")
+data_lists = [Q1_answer_list, Q1_score_list, Q1_2_answer_list, Q1_2_score_list,
+              Q2_answer_list, Q2_score_list, Q2_2_answer_list, Q2_2_score_list,
+              Q3_answer_list, Q3_score_list]
+
+df = pd.DataFrame(data_lists).T
+df.columns = column_names
+
+df.to_excel('output.xlsx', index=False)
+print("===> End. Results Saved in output.xlsx.")
 input("Press Enter to exit...")
 sys.exit()
